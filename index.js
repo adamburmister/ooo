@@ -65,8 +65,11 @@ controller.on('slash_command', function (bot, message) {
           // Deal with the Help case      
           if (message.text === "help") {
             bot.replyPrivate(message,
-            "I can update your displayed user name in Slack to include your Out Of Office status. " +
-            "For instance typing `/ooo WFH` would set your display name to \"" + storedUserData.profile.real_name + " (WFH)\"");
+              "I can update your displayed user name in Slack to include your Out Of Office status.\n" +
+              "For instance typing `/ooo` would set your display name to \"" + storedUserData.profile.real_name + " (OOO)\".\n" +
+              "You can also include a location, like `/ooo Cafe`, which would set your display name to \"" + 
+              storedUserData.profile.real_name + " (Cafe)\".\n"
+            );
             return;
           }
           
