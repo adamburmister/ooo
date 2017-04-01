@@ -21,8 +21,8 @@ module.exports = function(web, userId, oooConfig) {
         lastName = oooConfig.user.profile.last_name + " (" + oooConfig.location + ")";
       }
     } catch(e) {
-      console.log(e);
-      reject('There was an error');
+      console.error(e);
+      return reject('There was an error');
     }
 
     // Update their last name (+ OOO status) in their user profile
@@ -31,14 +31,13 @@ module.exports = function(web, userId, oooConfig) {
       value: lastName
     }, function(err, updatedUser) {
       if (err) {
-        console.log('error setting user profile');
+        console.error('Error setting user profile');
         return reject("There was a problem updating your OOO status.");
-      }      
+      }
 
       // TODO: Overlay a status icon on the User Avatar and call setPhoto
       // to update it before resolving
 
-      console.log('setting user profile', updatedUser);
       return resolve(updatedUser.profile);
     });
   });
