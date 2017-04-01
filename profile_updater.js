@@ -12,8 +12,6 @@ module.exports = function(web, userId, oooConfig) {
   return new Promise(function (resolve, reject) {
     var lastName;
 
-    console.log('oooConfig', oooConfig);
-
     try {
       if (oooConfig.isClearing) {
         lastName = oooConfig.user.profile.last_name;

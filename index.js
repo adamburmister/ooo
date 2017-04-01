@@ -40,14 +40,6 @@ controller.on('slash_command', function (bot, message) {
     case "/ooo": // handle the `/ooo` slash command
       if (message.token !== process.env.VERIFICATION_TOKEN) return; //just ignore it.
 
-      // Deal with the Help case      
-      if (message.text === "help") {
-        bot.replyPrivate(message,
-        "I can update your username to include your Out Of Office status, " +
-        "for instance typing /ooo WFH would set your display name to \"Jonny Appleseed (WFH)\"");
-        return;
-      }
-
       // Deal with the clear case
       var isClearing = false;
       if (message.text === "clear" || message.text === "reset" || message.text === "back") {
@@ -56,11 +48,9 @@ controller.on('slash_command', function (bot, message) {
 
       // Parse the location from the message
       var location = message.text || DEFAULT_OOO_LOCATION;
-      console.log('message', message);
 
       // Get the authed User's profile
       web.users.profile.get({}, function(err, remoteUserData) {
-        console.log('remoteUserData', remoteUserData);
         controller.storage.users.get(message.user_id, function(err, storedUserData) {
           // If we haven't seen this user before we should save their profile as a backup
           if (err || !storedUserData || !storedUserData.profile) {
@@ -72,6 +62,14 @@ controller.on('slash_command', function (bot, message) {
             console.log('No stored user data', storedUserData);
           }
 
+          // Deal with the Help case      
+          if (message.text === "help") {
+            bot.replyPrivate(message,
+            "I can update your displayed user name in Slack to include your Out Of Office status. " +
+            "For instance typing `/ooo WFH` would set your display name to \"" + storedUserData.profile.real_name + " (WFH)\"");
+            return;
+          }
+          
           // Otherwise this is a location update
           UserProfileUpdater(
             web,
