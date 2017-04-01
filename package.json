@@ -1,0 +1,11 @@
+{
+  "name": "ooo-bot",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@slack/client": "^3.9.0",
+    "botkit": "^0.5.2"
+  }
+}
