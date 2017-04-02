@@ -1,5 +1,16 @@
-// Enable some logging on now.sh
-require('now-logs')(process.env.LOGGING_KEY)
+// Load process.env ENV vars from `./.env` file
+require('dotenv').config();
+
+// Enable logging to Loggly
+var winston  = require('winston');
+require('winston-loggly-bulk');
+ 
+winston.add(winston.transports.Loggly, {
+  inputToken: process.env.LOGGLY_CUSTOMER_TOKEN,
+  subdomain: process.env.LOGGLY_SUBDOMAIN,
+  tags: ["ooo"],
+  json:true
+});
 
 var Botkit = require('botkit');
 var mongoStorage = require('botkit-storage-mongo')({mongoUri: process.env.MONGO_URI});
@@ -7,7 +18,7 @@ var UserProfileUpdater = require('./profile_updater');
 var WebClient = require('@slack/client').WebClient;
 
 if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET || !process.env.PORT || !process.env.VERIFICATION_TOKEN) {
-  console.log('Error: Specify CLIENT_ID, CLIENT_SECRET, VERIFICATION_TOKEN and PORT in environment');
+  winston.error('Error: Specify CLIENT_ID, CLIENT_SECRET, VERIFICATION_TOKEN and PORT in environment');
   process.exit(1);
 }
 
@@ -63,7 +74,7 @@ controller.on('slash_command', function (bot, message) {
               location: location 
             });
             controller.storage.users.save(storedUserData);
-            console.log('No stored user data', storedUserData);
+            winston.log('No stored user data', storedUserData);
           }
 
           // Deal with the Help case      
@@ -74,6 +85,7 @@ controller.on('slash_command', function (bot, message) {
               "You can also include a location, like `/ooo Cafe`, which would set your display name to \"" + 
               storedUserData.profile.real_name + " (Cafe)\".\n"
             );
+            winston.log('Returned help message');
             return;
           }
           
@@ -85,7 +97,8 @@ controller.on('slash_command', function (bot, message) {
               location: location,
               isClearing: isClearing,
               user: storedUserData 
-            }
+            },
+            winston,
           ).then(function(updatedProfile) {
             var reply;
             if (isClearing) {
@@ -99,6 +112,8 @@ controller.on('slash_command', function (bot, message) {
             } else {
               reply = "You've been marked as OOO: " + updatedProfile.real_name;
             }
+
+            winston.info(reply);
 
             bot.replyPrivate(message, reply);
           });

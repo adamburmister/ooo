@@ -7,8 +7,9 @@
  * @param {bool} oooConfig.isClearing
  * @param {object} oooConfig.user
  * @param {object} oooConfig.user.profile
+ * @param {Winston} winston logger
  */
-module.exports = function(web, userId, oooConfig) {
+module.exports = function(web, userId, oooConfig, winston) {
   return new Promise(function (resolve, reject) {
     var lastName;
 
@@ -19,7 +20,7 @@ module.exports = function(web, userId, oooConfig) {
         lastName = oooConfig.user.profile.last_name + " (" + oooConfig.location + ")";
       }
     } catch(e) {
-      console.error(e);
+      winston.error(e);
       return reject('There was an error');
     }
 
@@ -29,7 +30,7 @@ module.exports = function(web, userId, oooConfig) {
       value: lastName
     }, function(err, updatedUser) {
       if (err) {
-        console.error('Error setting user profile');
+        winston.error('Error setting user profile');
         return reject("There was a problem updating your OOO status.");
       }
 
