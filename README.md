@@ -1,4 +1,4 @@
-# OOO Bot
+# OOO Slack Command
 
 This is a simple Slack command to mark your user profile as Out Of Office (commonly referred to as "OOO").
 
@@ -21,12 +21,12 @@ For instance, you can use the command `/ooo WFH` to mark yourself as WFH (Workin
 There's nothing magic about the location "WFH", you can use anything. `/ooo Cafe` will update your user profile to be "Your Name (Cafe)".
 
 ### `/ooo back`
-#### Marking yourself as back in the office
+#### Setting yourself as back in the office
 
 `/ooo back` (or it's aliases "clear" or "reset") resets your user profile to it's original state, stripping the OOO location from your last name field.
 
 For instance, you can use the command `/ooo back` to mark yourself as back in the office, updating your user profile from "Your Name (OOO)" to "Your Name".
 
-## Author
+## Made by this guy
 
-Adam Burmister, adam@burmister.com
+I hope you find it useful! – Adam Burmister, adam@burmister.com

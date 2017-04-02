@@ -1,5 +1,5 @@
 {
-  "name": "ooo-bot",
+  "name": "ooo",
   "scripts": {
     "start": "node index.js",
     "test": "jest"
