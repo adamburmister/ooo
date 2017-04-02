@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@slack/client": "^3.9.0",
-    "botkit": "^0.5.2"
+    "botkit": "^0.5.2",
+    "botkit-storage-mongo": "^1.0.4"
   }
 }

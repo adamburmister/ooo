@@ -1,6 +1,8 @@
 var Botkit = require('botkit');
+var mongoStorage = require('botkit-storage-mongo')({mongoUri: process.env.MONGO_URI});
 var UserProfileUpdater = require('./profile_updater');
 var WebClient = require('@slack/client').WebClient;
+
 
 if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET || !process.env.PORT || !process.env.VERIFICATION_TOKEN) {
   console.log('Error: Specify CLIENT_ID, CLIENT_SECRET, VERIFICATION_TOKEN and PORT in environment');
@@ -13,7 +15,7 @@ var controller = Botkit.slackbot({
   debug: true,
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  json_file_store: './db',
+  storage: mongoStorage,
   scopes: [
     'commands', 
     'users.profile:read',
