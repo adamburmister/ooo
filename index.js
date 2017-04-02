@@ -1,8 +1,10 @@
+// Enable some logging on now.sh
+require('now-logs')(process.env.LOGGING_KEY)
+
 var Botkit = require('botkit');
 var mongoStorage = require('botkit-storage-mongo')({mongoUri: process.env.MONGO_URI});
 var UserProfileUpdater = require('./profile_updater');
 var WebClient = require('@slack/client').WebClient;
-
 
 if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET || !process.env.PORT || !process.env.VERIFICATION_TOKEN) {
   console.log('Error: Specify CLIENT_ID, CLIENT_SECRET, VERIFICATION_TOKEN and PORT in environment');
@@ -89,7 +91,11 @@ controller.on('slash_command', function (bot, message) {
             if (isClearing) {
               reply = "Welcome back! You're no longer marked as OOO, " + updatedProfile.real_name;
               // clear our stored status for the user
-              controller.storage.users.delete(message.user_id);
+              try {
+                controller.storage.users.delete(message.user_id);
+              } catch (e) {
+                // ignore
+              }
             } else {
               reply = "You've been marked as OOO: " + updatedProfile.real_name;
             }
